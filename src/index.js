@@ -12,7 +12,7 @@ root.render(
   <React.StrictMode>
     <GlobalStyles
       styles={{
-        body: { backgroundColor: "#2b3942" },
+        body: { backgroundColor: "#f2ffe3" },
       }}
     />
     <App />

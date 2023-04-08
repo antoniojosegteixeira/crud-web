@@ -71,6 +71,9 @@ const CrudForm = () => {
     <Box className="formWrapper">
       <form onSubmit={handleSubmit}>
         <Grid container direction="column" sx={{ pb: 1 }}>
+          <Typography variant="h6" align="center" color="#4e4e4e">
+            Adicionar produto
+          </Typography>
           <InputLabel className="formInputLabel">Nome do cliente</InputLabel>
           <input
             type="text"

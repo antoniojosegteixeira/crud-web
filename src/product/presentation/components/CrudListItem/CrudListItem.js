@@ -2,7 +2,8 @@ import React, { useContext, useState } from "react";
 import { CrudContext } from "../../context/crudContext";
 import StatusRadio from "../StatusRadio/StatusRadio";
 import DatePickerComponent from "../DatePicker/OrderDatePicker";
-import { Box } from "@mui/system";
+import { Card, Box } from "@mui/material";
+
 import {
   Grid,
   InputLabel,
@@ -86,18 +87,24 @@ const CrudListItem = ({ item }) => {
     <ListItem
       key={item.id}
       sx={{
-        border: "1px solid #ccc",
         borderRadius: "4px",
         mb: 0.5,
+        py: 1,
+        px: 2,
         justifyContent: "space-between",
+        backgroundColor: "#fbfbfb",
+        boxShadow: "rgba(149, 157, 165, 0.15) 0px 3px 6px 0px",
       }}
     >
       {updatingItemId !== item.id && (
         <Grid container>
           <Grid item xs={12}>
-            <Typography sx={{ fontWeight: "bold" }}>
+            <Typography sx={{ fontWeight: "bold", pt: 1 }}>
               {item.clientName}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">Id: {item.id}</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">
