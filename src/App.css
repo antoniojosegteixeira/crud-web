@@ -4,3 +4,24 @@ body {
   min-height: 100vh;
   height: 100%;
 }
+
+.formWrapper {
+  border-radius: 10px;
+  background-color: white;
+  padding: 20px;
+}
+
+.formLabel {
+  width: 100%;
+}
+
+.custom-input {
+  background-color: #fff;
+  border: 1px solid #ccc !important;
+  border-radius: 4px;
+  font-size: 16px;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+}

@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { getProducts } from "../../controllers/productController";
+import ProductModel from "../../models/productModel";
 
 function useItems() {
   const [items, setItems] = useState([]);
@@ -7,13 +9,9 @@ function useItems() {
   const [itemEditName, setItemEditName] = useState("");
 
   useEffect(() => {
-    // Simulate getting data from a backend API
-    const initialData = [
-      { id: 1, name: "Item 1" },
-      { id: 2, name: "Item 2" },
-      { id: 3, name: "Item 3" },
-    ];
-    setItems(initialData);
+    getProducts().then((listOfProducts) => {
+      setItems(listOfProducts);
+    });
   }, []);
 
   const handleItemNameChange = (event) => {
