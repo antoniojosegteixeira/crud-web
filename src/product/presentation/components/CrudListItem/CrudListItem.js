@@ -106,11 +106,34 @@ const CrudListItem = ({ item }) => {
                 handleStatusOptionChange={handleStatusOptionEditChange}
               />
             </Box>
+            {updatingItemId === item.id && (
+              <Box>
+                <Button onClick={() => handleUpdateRequest(item.id)}>
+                  Salvar
+                </Button>
+                <Button onClick={() => handleDeleteItem(item.id)}>
+                  Deletar
+                </Button>
+              </Box>
+            )}
           </form>
         </Box>
       )}
 
-      <Box>
+      {updatingItemId !== item.id && (
+        <Box>
+          <Button onClick={() => handleUpdateRequest(item.id)}>Editar</Button>
+          <Button onClick={() => handleDeleteItem(item.id)}>Deletar</Button>
+        </Box>
+      )}
+    </ListItem>
+  );
+};
+
+export default CrudListItem;
+
+/*
+<Box>
         {updatingItemId === item.id ? (
           <Button onClick={() => handleUpdateRequest(item.id)}>Salvar</Button>
         ) : (
@@ -119,8 +142,4 @@ const CrudListItem = ({ item }) => {
 
         <Button onClick={() => handleDeleteItem(item.id)}>Deletar</Button>
       </Box>
-    </ListItem>
-  );
-};
-
-export default CrudListItem;
+*/
