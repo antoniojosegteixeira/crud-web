@@ -3,17 +3,17 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./datePicker.css";
 
-function DatePickerComponent({ date, setDate }) {
-  const isFutureDate = (newDate) => {
+function OrderDatePicker({ date, setDate }) {
+  const pastDatesOnly = (newDate) => {
     const today = new Date();
-    return newDate < today;
+    return newDate <= today;
   };
 
   return (
     <DatePicker
       selected={date}
       onChange={setDate}
-      filterDate={isFutureDate}
+      filterDate={pastDatesOnly}
       dateFormat="dd/MM/yyyy"
       placeholderText="Selecione uma data"
       className="custom-datepicker"
@@ -21,4 +21,4 @@ function DatePickerComponent({ date, setDate }) {
   );
 }
 
-export default DatePickerComponent;
+export default OrderDatePicker;

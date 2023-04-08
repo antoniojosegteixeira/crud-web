@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 import { CrudContext } from "../../context/crudContext";
 import StatusRadio from "../StatusRadio/StatusRadio";
-import DatePickerComponent from "../DatePicker/DatePicker";
+import DatePickerComponent from "../DatePicker/OrderDatePicker";
 import { Box } from "@mui/system";
 import { Grid, InputLabel, ListItem, Button, Typography } from "@mui/material";
+import useValidation from "../../hooks/useItems";
+import OrderDatePicker from "../DatePicker/OrderDatePicker";
+import DeliveryDatePicker from "../DatePicker/DeliveryDatePicker";
 
 const CrudListItem = ({ item }) => {
   const {
@@ -12,6 +15,16 @@ const CrudListItem = ({ item }) => {
     updatingItemId,
     setUpdatingItemId,
   } = useContext(CrudContext);
+
+  const {
+    checkFieldValidations,
+    clientNameValidation,
+    setClientNameValidation,
+    orderDateValidation,
+    setOrderDateValidation,
+    deliveryDateValidation,
+    setDeliveryDateValidation,
+  } = useValidation();
 
   // Variables used to hold editing data
   const [clientNameEdit, setClientNameEdit] = useState(item.clientName);
@@ -31,19 +44,33 @@ const CrudListItem = ({ item }) => {
       return;
     } else {
       if (id) {
-        handleUpdateItem({
-          id: id,
-          clientName: clientNameEdit,
-          orderDate: orderDateEdit,
-          deliveryDate: deliveryDateEdit,
-          status: selectedStatusOptionEdit,
-        });
+        const isValid = checkFieldValidations(
+          clientNameEdit,
+          orderDateEdit,
+          deliveryDateEdit
+        );
+
+        if (isValid) {
+          handleUpdateItem({
+            id: id,
+            clientName: clientNameEdit,
+            orderDate: orderDateEdit,
+            deliveryDate: deliveryDateEdit,
+            status: selectedStatusOptionEdit,
+          });
+        }
       }
     }
   };
 
   const handleStatusOptionEditChange = (event) => {
     setStatusSelectedOptionEdit(event.target.value);
+  };
+
+  // Reset validation and set new value for client name
+  const handleNameChange = (value) => {
+    setClientNameValidation("");
+    setClientNameEdit(value);
   };
 
   return (
@@ -77,26 +104,40 @@ const CrudListItem = ({ item }) => {
               <input
                 type="text"
                 value={clientNameEdit}
-                onChange={(e) => setClientNameEdit(e.target.value)}
+                onChange={(e) => handleNameChange(e.target.value)}
                 className="custom-input"
                 placeholder="Nome do cliente"
               />
+              <Typography variant="caption" sx={{ color: "red" }}>
+                {clientNameValidation?.error}
+              </Typography>
             </Grid>
 
             <Box sx={{ pb: 1 }}>
               <InputLabel>Data do pedido</InputLabel>
-              <DatePickerComponent
-                date={orderDateEdit}
-                setDate={setOrderDateEdit}
-              />
+              <Box onClick={() => setOrderDateValidation("")}>
+                <OrderDatePicker
+                  date={orderDateEdit}
+                  setDate={setOrderDateEdit}
+                />
+              </Box>
+              <Typography variant="caption" sx={{ color: "red" }}>
+                {orderDateValidation?.error}
+              </Typography>
             </Box>
 
             <Box sx={{ pb: 1 }}>
               <InputLabel>Data da entrega</InputLabel>
-              <DatePickerComponent
-                date={deliveryDateEdit}
-                setDate={setDeliveryDateEdit}
-              />
+              <Box onClick={() => setDeliveryDateValidation("")}>
+                <DeliveryDatePicker
+                  date={deliveryDateEdit}
+                  setDate={setDeliveryDateEdit}
+                  startingDate={orderDateEdit}
+                />
+              </Box>
+              <Typography variant="caption" sx={{ color: "red" }}>
+                {deliveryDateValidation?.error}
+              </Typography>
             </Box>
 
             <Box sx={{ pb: 1 }}>

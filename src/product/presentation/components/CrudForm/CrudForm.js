@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import DatePickerComponent from "../DatePicker/DatePicker";
+import DatePickerComponent from "../DatePicker/OrderDatePicker";
 import { CrudContext } from "../../context/crudContext";
 import {
   Grid,
@@ -13,6 +13,8 @@ import {
 import StatusRadio from "../StatusRadio/StatusRadio";
 import { dateValidation, nameValidation } from "../../utils/validations";
 import useValidation from "../../hooks/useItems";
+import OrderDatePicker from "../DatePicker/OrderDatePicker";
+import DeliveryDatePicker from "../DatePicker/DeliveryDatePicker";
 
 const CrudForm = () => {
   const { handleAddNewItem } = useContext(CrudContext);
@@ -80,7 +82,7 @@ const CrudForm = () => {
         <Box sx={{ pb: 1 }}>
           <InputLabel>Data do pedido</InputLabel>
           <Box onClick={() => setOrderDateValidation("")}>
-            <DatePickerComponent date={orderDate} setDate={setOrderDate} />
+            <OrderDatePicker date={orderDate} setDate={setOrderDate} />
           </Box>
 
           <Typography variant="caption" sx={{ color: "red" }}>
@@ -91,9 +93,10 @@ const CrudForm = () => {
         <Box sx={{ pb: 1 }}>
           <InputLabel>Data da entrega</InputLabel>
           <Box onClick={() => setDeliveryDateValidation("")}>
-            <DatePickerComponent
+            <DeliveryDatePicker
               date={deliveryDate}
               setDate={setDeliveryDate}
+              startingDate={orderDate}
             />
           </Box>
 
