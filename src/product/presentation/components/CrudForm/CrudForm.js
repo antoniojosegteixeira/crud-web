@@ -45,6 +45,12 @@ const CrudForm = () => {
     // Perform validation
     const isValid = checkFieldValidations(clientName, orderDate, deliveryDate);
 
+    console.log({
+      clientName,
+      orderDate: orderDate,
+      deliveryDate: deliveryDate,
+      status: selectedStatusOption,
+    });
     if (isValid) {
       handleAddNewItem({
         clientName,

@@ -3,7 +3,14 @@ import { CrudContext } from "../../context/crudContext";
 import StatusRadio from "../StatusRadio/StatusRadio";
 import DatePickerComponent from "../DatePicker/OrderDatePicker";
 import { Box } from "@mui/system";
-import { Grid, InputLabel, ListItem, Button, Typography } from "@mui/material";
+import {
+  Grid,
+  InputLabel,
+  ListItem,
+  Button,
+  Typography,
+  capitalize,
+} from "@mui/material";
 import useValidation from "../../hooks/useItems";
 import OrderDatePicker from "../DatePicker/OrderDatePicker";
 import DeliveryDatePicker from "../DatePicker/DeliveryDatePicker";
@@ -44,6 +51,7 @@ const CrudListItem = ({ item }) => {
       return;
     } else {
       if (id) {
+        // Check input validation
         const isValid = checkFieldValidations(
           clientNameEdit,
           orderDateEdit,
@@ -54,8 +62,8 @@ const CrudListItem = ({ item }) => {
           handleUpdateItem({
             id: id,
             clientName: clientNameEdit,
-            orderDate: orderDateEdit,
-            deliveryDate: deliveryDateEdit,
+            orderDate: new Date(orderDateEdit),
+            deliveryDate: new Date(deliveryDateEdit),
             status: selectedStatusOptionEdit,
           });
         }
@@ -73,6 +81,7 @@ const CrudListItem = ({ item }) => {
     setClientNameEdit(value);
   };
 
+  console.log(item.orderDate, item.deliveryDate);
   return (
     <ListItem
       key={item.id}
@@ -84,9 +93,31 @@ const CrudListItem = ({ item }) => {
       }}
     >
       {updatingItemId !== item.id && (
-        <Box>
-          <Typography>{item.clientName}</Typography>
-        </Box>
+        <Grid container>
+          <Grid item xs={12}>
+            <Typography sx={{ fontWeight: "bold" }}>
+              {item.clientName}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">
+              Data do pedido:{" "}
+              {item.orderDate && new Date(item.orderDate).toLocaleDateString()}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">
+              Data de entrega:{" "}
+              {item.deliveryDate &&
+                new Date(item.deliveryDate).toLocaleDateString()}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1">
+              Status: {capitalize(item.status)}
+            </Typography>
+          </Grid>
+        </Grid>
       )}
 
       {updatingItemId === item.id && (
@@ -172,15 +203,3 @@ const CrudListItem = ({ item }) => {
 };
 
 export default CrudListItem;
-
-/*
-<Box>
-        {updatingItemId === item.id ? (
-          <Button onClick={() => handleUpdateRequest(item.id)}>Salvar</Button>
-        ) : (
-          <Button onClick={() => handleUpdateRequest(item.id)}>Editar</Button>
-        )}
-
-        <Button onClick={() => handleDeleteItem(item.id)}>Deletar</Button>
-      </Box>
-*/

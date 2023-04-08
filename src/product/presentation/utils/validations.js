@@ -1,5 +1,5 @@
 export const nameValidation = (name) => {
-  if (name && name.length > 3) {
+  if (name && name.length >= 2) {
     return true;
   }
 
@@ -7,7 +7,7 @@ export const nameValidation = (name) => {
     return { error: "Essa informação é obrigatória" };
   }
 
-  if (name && name.length < 3) {
+  if (name && name.length <= 1) {
     return { error: "Insira um nome válido" };
   }
 };
