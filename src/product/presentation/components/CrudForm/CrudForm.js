@@ -1,11 +1,30 @@
 import React, { useContext, useState } from "react";
 import DatePickerComponent from "../DatePicker/DatePicker";
 import { CrudContext } from "../../context/crudContext";
-import { Grid, Button, InputLabel, Box, Form, Input } from "@mui/material";
+import {
+  Grid,
+  Button,
+  InputLabel,
+  Box,
+  Form,
+  Input,
+  Typography,
+} from "@mui/material";
 import StatusRadio from "../StatusRadio/StatusRadio";
+import { dateValidation, nameValidation } from "../../utils/validations";
+import useValidation from "../../hooks/useItems";
 
 const CrudForm = () => {
   const { handleAddNewItem } = useContext(CrudContext);
+  const {
+    checkFieldValidations,
+    clientNameValidation,
+    setClientNameValidation,
+    orderDateValidation,
+    setOrderDateValidation,
+    deliveryDateValidation,
+    setDeliveryDateValidation,
+  } = useValidation();
 
   // Item creation form variables
   const [clientName, setClientName] = useState("");
@@ -21,12 +40,23 @@ const CrudForm = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    handleAddNewItem({
-      clientName,
-      orderDate: orderDate,
-      deliveryDate: deliveryDate,
-      status: selectedStatusOption,
-    });
+    // Perform validation
+    const isValid = checkFieldValidations(clientName, orderDate, deliveryDate);
+
+    if (isValid) {
+      handleAddNewItem({
+        clientName,
+        orderDate: orderDate,
+        deliveryDate: deliveryDate,
+        status: selectedStatusOption,
+      });
+    }
+  };
+
+  // Reset validation and set new value for client name
+  const handleNameChange = (value) => {
+    setClientNameValidation("");
+    setClientName(value);
   };
 
   return (
@@ -37,20 +67,39 @@ const CrudForm = () => {
           <input
             type="text"
             value={clientName}
-            onChange={(e) => setClientName(e.target.value)}
+            onChange={(e) => handleNameChange(e.target.value)}
             className="custom-input"
             placeholder="Nome do cliente"
           />
+
+          <Typography variant="caption" sx={{ color: "red" }}>
+            {clientNameValidation?.error}
+          </Typography>
         </Grid>
 
         <Box sx={{ pb: 1 }}>
           <InputLabel>Data do pedido</InputLabel>
-          <DatePickerComponent date={orderDate} setDate={setOrderDate} />
+          <Box onClick={() => setOrderDateValidation("")}>
+            <DatePickerComponent date={orderDate} setDate={setOrderDate} />
+          </Box>
+
+          <Typography variant="caption" sx={{ color: "red" }}>
+            {orderDateValidation?.error}
+          </Typography>
         </Box>
 
         <Box sx={{ pb: 1 }}>
           <InputLabel>Data da entrega</InputLabel>
-          <DatePickerComponent date={deliveryDate} setDate={setDeliveryDate} />
+          <Box onClick={() => setDeliveryDateValidation("")}>
+            <DatePickerComponent
+              date={deliveryDate}
+              setDate={setDeliveryDate}
+            />
+          </Box>
+
+          <Typography variant="caption" sx={{ color: "red" }}>
+            {deliveryDateValidation?.error}
+          </Typography>
         </Box>
 
         <Box sx={{ pb: 1 }}>
