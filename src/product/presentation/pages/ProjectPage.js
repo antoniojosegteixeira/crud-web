@@ -7,11 +7,11 @@ import CrudList from "../components/CrudList/CrudList";
 const ProjectPage = () => {
   return (
     <CrudContextProvider>
-      <Grid container columnSpacing={2} sx={{ p: 2 }}>
-        <Grid item xs={6}>
+      <Grid container columnSpacing={2} rowSpacing={2} sx={{ p: 2 }}>
+        <Grid item xs={12} md={6}>
           <CrudForm />
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12} md={6}>
           <CrudList />
         </Grid>
       </Grid>
