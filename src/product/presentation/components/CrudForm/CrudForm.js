@@ -1,5 +1,4 @@
 import React, { useContext, useState } from "react";
-import DatePickerComponent from "../DatePicker/OrderDatePicker";
 import { CrudContext } from "../../context/crudContext";
 import {
   Grid,
@@ -11,13 +10,14 @@ import {
   Typography,
 } from "@mui/material";
 import StatusRadio from "../StatusRadio/StatusRadio";
-import { dateValidation, nameValidation } from "../../utils/validations";
 import useValidation from "../../hooks/useItems";
 import OrderDatePicker from "../DatePicker/OrderDatePicker";
 import DeliveryDatePicker from "../DatePicker/DeliveryDatePicker";
+import { SnackContext } from "../../context/snackContext";
 
 const CrudForm = () => {
   const { handleAddNewItem } = useContext(CrudContext);
+  const { handleOpen } = useContext(SnackContext);
   const {
     checkFieldValidations,
     clientNameValidation,
@@ -39,25 +39,23 @@ const CrudForm = () => {
     setStatusSelectedOption(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Perform validation
     const isValid = checkFieldValidations(clientName, orderDate, deliveryDate);
 
-    console.log({
-      clientName,
-      orderDate: orderDate,
-      deliveryDate: deliveryDate,
-      status: selectedStatusOption,
-    });
     if (isValid) {
-      handleAddNewItem({
+      const response = await handleAddNewItem({
         clientName,
         orderDate: orderDate,
         deliveryDate: deliveryDate,
         status: selectedStatusOption,
       });
+
+      if (response.message) {
+        handleOpen(response.message);
+      }
     }
   };
 

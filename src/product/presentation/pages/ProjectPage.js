@@ -1,13 +1,14 @@
-import React from "react";
-import { CrudContextProvider } from "../context/crudContext";
+import React, { useContext } from "react";
 import CrudForm from "../components/CrudForm/CrudForm";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Snackbar } from "@mui/material";
 import CrudList from "../components/CrudList/CrudList";
 import logo from "../../../assets/images/sf.png";
+import { SnackContext } from "../context/snackContext";
 
 const ProjectPage = () => {
+  const { open, message, handleClose } = useContext(SnackContext);
   return (
-    <CrudContextProvider>
+    <>
       <Box>
         <img src={logo} style={{ width: "200px", height: "100px" }} />
       </Box>
@@ -20,7 +21,13 @@ const ProjectPage = () => {
           <CrudList />
         </Grid>
       </Grid>
-    </CrudContextProvider>
+      <Snackbar
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+        message={message}
+      />
+    </>
   );
 };
 

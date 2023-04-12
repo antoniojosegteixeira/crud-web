@@ -5,6 +5,7 @@ import {
   deleteProduct,
   editProduct,
 } from "../../controllers/productController";
+import ErrorModel from "../../models/errorModel";
 
 export const CrudContext = createContext();
 
@@ -16,11 +17,13 @@ export const CrudContextProvider = (props) => {
     getAllProducts();
   }, []);
 
-  const getAllProducts = () => {
-    getProducts().then((listOfProducts) => {
-      console.log(listOfProducts);
+  const getAllProducts = async () => {
+    try {
+      const listOfProducts = await getProducts();
       setItems(listOfProducts);
-    });
+    } catch (err) {
+      return new ErrorModel("Erro ao buscar produtos");
+    }
   };
 
   const handleAddNewItem = async (product) => {
@@ -29,7 +32,7 @@ export const CrudContextProvider = (props) => {
       await addProduct(product);
       getAllProducts();
     } catch (err) {
-      console.log(`error adding ${product}`);
+      return new ErrorModel("Erro ao adicionar produto");
     }
   };
 
@@ -38,7 +41,7 @@ export const CrudContextProvider = (props) => {
       await deleteProduct(id);
       getAllProducts();
     } catch (err) {
-      console.log(`error deleting ${id}`);
+      return new ErrorModel("Erro ao deletar produto");
     }
   };
 
@@ -49,7 +52,7 @@ export const CrudContextProvider = (props) => {
       setUpdatingItemId("");
       getAllProducts();
     } catch (err) {
-      console.log(`error updating ${product}`);
+      return new ErrorModel("Erro ao editar produto");
     }
   };
 

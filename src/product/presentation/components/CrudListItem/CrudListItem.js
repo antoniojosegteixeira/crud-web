@@ -15,6 +15,7 @@ import {
 import useValidation from "../../hooks/useItems";
 import OrderDatePicker from "../DatePicker/OrderDatePicker";
 import DeliveryDatePicker from "../DatePicker/DeliveryDatePicker";
+import { SnackContext } from "../../context/snackContext";
 
 const CrudListItem = ({ item }) => {
   const {
@@ -23,6 +24,8 @@ const CrudListItem = ({ item }) => {
     updatingItemId,
     setUpdatingItemId,
   } = useContext(CrudContext);
+
+  const { handleOpen } = useContext(SnackContext);
 
   const {
     checkFieldValidations,
@@ -46,7 +49,14 @@ const CrudListItem = ({ item }) => {
     item.status
   );
 
-  const handleUpdateRequest = (id) => {
+  const handleOrderDateEdit = (value) => {
+    if (new Date(orderDateEdit) < new Date(deliveryDateEdit)) {
+      setDeliveryDateEdit("");
+    }
+    setOrderDateEdit(value);
+  };
+
+  const handleUpdateRequest = async (id) => {
     if (updatingItemId !== id) {
       setUpdatingItemId(id);
       return;
@@ -60,13 +70,17 @@ const CrudListItem = ({ item }) => {
         );
 
         if (isValid) {
-          handleUpdateItem({
+          const response = await handleUpdateItem({
             id: id,
             clientName: clientNameEdit,
             orderDate: new Date(orderDateEdit),
             deliveryDate: new Date(deliveryDateEdit),
             status: selectedStatusOptionEdit,
           });
+
+          if (response.message) {
+            handleOpen(response.message);
+          }
         }
       }
     }
@@ -82,7 +96,13 @@ const CrudListItem = ({ item }) => {
     setClientNameEdit(value);
   };
 
-  console.log(item.orderDate, item.deliveryDate);
+  const handleDeleteClick = async (id) => {
+    const response = await handleDeleteItem(id);
+    if (response.message) {
+      handleOpen(response.message);
+    }
+  };
+
   return (
     <ListItem
       key={item.id}
@@ -156,7 +176,7 @@ const CrudListItem = ({ item }) => {
               <Box onClick={() => setOrderDateValidation("")}>
                 <OrderDatePicker
                   date={orderDateEdit}
-                  setDate={setOrderDateEdit}
+                  setDate={handleOrderDateEdit}
                 />
               </Box>
               <Typography variant="caption" sx={{ color: "red" }}>
@@ -190,7 +210,7 @@ const CrudListItem = ({ item }) => {
                 <Button onClick={() => handleUpdateRequest(item.id)}>
                   Salvar
                 </Button>
-                <Button onClick={() => handleDeleteItem(item.id)}>
+                <Button onClick={() => handleDeleteClick(item.id)}>
                   Deletar
                 </Button>
               </Box>

@@ -1,12 +1,8 @@
-import ProjectPage from "./product/presentation/pages/ProjectPage";
 import "./App.css";
+import Wrapper from "./product/presentation/pages/Wrapper";
 
 const App = () => {
-  return (
-    <div className="app">
-      <ProjectPage />
-    </div>
-  );
+  return <Wrapper />;
 };
 
 export default App;
